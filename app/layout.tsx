@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Omarchy Hotkeys Helper",
-  description: "A simple web app to help you learn and practice all Omarchy hotkeys",
+  description:
+    "A simple web app to help you learn and practice all Omarchy hotkeys",
 };
 
 export default function RootLayout({
