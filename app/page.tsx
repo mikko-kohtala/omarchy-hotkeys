@@ -4,24 +4,44 @@ import { useEffect, useState } from "react";
 import { KeyCombo } from "@/app/_components/key-combo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { hotkeyCategories } from "@/lib/hotkeys";
 
 const PERCENTAGE_MULTIPLIER = 100;
 
+const FILTER_KEYS = [
+  { name: "Super", color: "blue" },
+  { name: "Ctrl", color: "orange" },
+  { name: "Shift", color: "green" },
+  { name: "Alt", color: "purple" },
+  { name: "Space", color: "pink" },
+  { name: "Tab", color: "cyan" },
+] as const;
+
 export default function Home() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const saved = localStorage.getItem("completed-hotkeys");
     if (saved) {
-      setCompleted(new Set(JSON.parse(saved)));
+      try {
+        setCompleted(new Set(JSON.parse(saved)));
+      } catch {
+        // Ignore invalid data
+      }
     }
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("completed-hotkeys", JSON.stringify([...completed]));
-  }, [completed]);
+    if (mounted) {
+      localStorage.setItem("completed-hotkeys", JSON.stringify([...completed]));
+    }
+  }, [completed, mounted]);
 
   const toggleHotkey = (id: string, checked: boolean) => {
     setCompleted((prev) => {
@@ -34,6 +54,40 @@ export default function Home() {
       return next;
     });
   };
+
+  const toggleKeyFilter = (key: string) => {
+    setSelectedKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
+
+  // Filter hotkeys based on search query and selected keys
+  const filteredCategories = hotkeyCategories.map((category) => ({
+    ...category,
+    hotkeys: category.hotkeys.filter((hotkey) => {
+      // Search query filter
+      const query = searchQuery.toLowerCase();
+      const matchesSearch =
+        !query ||
+        hotkey.keys.toLowerCase().includes(query) ||
+        hotkey.description.toLowerCase().includes(query);
+
+      // Selected keys filter (must contain ALL selected keys)
+      const matchesKeys =
+        selectedKeys.size === 0 ||
+        Array.from(selectedKeys).every((key) =>
+          hotkey.keys.toLowerCase().includes(key.toLowerCase())
+        );
+
+      return matchesSearch && matchesKeys;
+    }),
+  })).filter((category) => category.hotkeys.length > 0);
 
   const totalHotkeys = hotkeyCategories.reduce(
     (sum, cat) => sum + cat.hotkeys.length,
@@ -135,8 +189,84 @@ export default function Home() {
           </div>
         </header>
 
+        <div className="mb-8 space-y-4">
+          <div className="space-y-2">
+            <label className="text-neutral-400 text-sm" htmlFor="search">
+              Search hotkeys
+            </label>
+            <Input
+              className="max-w-xl"
+              id="search"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by key combination or description..."
+              type="text"
+              value={searchQuery}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-neutral-400 text-sm">
+              Filter by keys (select multiple to require all)
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {FILTER_KEYS.map((key) => {
+                const isSelected = selectedKeys.has(key.name);
+                const colorClasses = {
+                  blue: isSelected
+                    ? "border-blue-500 bg-blue-500/20 text-blue-400 ring-2 ring-blue-500/50"
+                    : "border-blue-500/20 bg-blue-500/10 text-blue-400 hover:border-blue-500/40 hover:bg-blue-500/20",
+                  orange: isSelected
+                    ? "border-orange-500 bg-orange-500/20 text-orange-400 ring-2 ring-orange-500/50"
+                    : "border-orange-500/20 bg-orange-500/10 text-orange-400 hover:border-orange-500/40 hover:bg-orange-500/20",
+                  green: isSelected
+                    ? "border-green-500 bg-green-500/20 text-green-400 ring-2 ring-green-500/50"
+                    : "border-green-500/20 bg-green-500/10 text-green-400 hover:border-green-500/40 hover:bg-green-500/20",
+                  purple: isSelected
+                    ? "border-purple-500 bg-purple-500/20 text-purple-400 ring-2 ring-purple-500/50"
+                    : "border-purple-500/20 bg-purple-500/10 text-purple-400 hover:border-purple-500/40 hover:bg-purple-500/20",
+                  pink: isSelected
+                    ? "border-pink-500 bg-pink-500/20 text-pink-400 ring-2 ring-pink-500/50"
+                    : "border-pink-500/20 bg-pink-500/10 text-pink-400 hover:border-pink-500/40 hover:bg-pink-500/20",
+                  cyan: isSelected
+                    ? "border-cyan-500 bg-cyan-500/20 text-cyan-400 ring-2 ring-cyan-500/50"
+                    : "border-cyan-500/20 bg-cyan-500/10 text-cyan-400 hover:border-cyan-500/40 hover:bg-cyan-500/20",
+                };
+
+                return (
+                  <button
+                    className={`inline-flex min-w-20 items-center justify-center rounded border px-4 py-2 font-medium text-sm transition-all ${colorClasses[key.color]}`}
+                    key={key.name}
+                    onClick={() => toggleKeyFilter(key.name)}
+                    type="button"
+                  >
+                    {key.name}
+                  </button>
+                );
+              })}
+              {selectedKeys.size > 0 && (
+                <button
+                  className="inline-flex items-center justify-center rounded border border-neutral-600 bg-neutral-800 px-4 py-2 font-medium text-neutral-300 text-sm transition-all hover:bg-neutral-700"
+                  onClick={() => setSelectedKeys(new Set())}
+                  type="button"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
         <main className="space-y-8">
-          {hotkeyCategories.map((category) => (
+          {filteredCategories.length === 0 ? (
+            <Card className="border-neutral-800 bg-neutral-900/50">
+              <CardContent className="py-10 text-center">
+                <p className="text-neutral-400 text-lg">
+                  No hotkeys found matching &quot;{searchQuery}&quot;
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            filteredCategories.map((category) => (
             <Card
               className="border-neutral-800 bg-neutral-900/50"
               key={category.name}
@@ -208,7 +338,7 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )))}
         </main>
       </div>
     </div>
