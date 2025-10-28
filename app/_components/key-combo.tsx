@@ -58,8 +58,9 @@ export function KeyCombo({ keys }: KeyComboProps) {
   const parsedKeys = parseKeys(keys);
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {parsedKeys.map((key) => (
-        <kbd className={getKeyClasses(key)} key={key}>
+      {parsedKeys.map((key, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: Keys can be duplicated in combinations like "Space + Space"
+        <kbd className={getKeyClasses(key)} key={`${key}-${idx}`}>
           {key}
         </kbd>
       ))}
