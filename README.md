@@ -1,29 +1,18 @@
 # Omarchy Hotkeys Helper
 
-A modern Next.js web app to help you learn and practice all Omarchy hotkeys, built with shadcn/ui and Tailwind CSS.
+Learn Omarchy shortcuts. Track progress. Build habits.
 
-## Features
+**https://omarchy-hotkeys.vercel.app**
 
-- Complete list of all Omarchy hotkeys organized by category
-- Check off hotkeys as you test them
-- Progress tracking with visual progress bar
-- Your progress is automatically saved in browser localStorage
-- Clean, dark-themed interface with beautiful shadcn/ui components
-- Color-coded keyboard shortcuts for better visual organization
 
-## Getting Started
+## Quick Start
 
-1. Install dependencies:
 ```bash
 bun install
-```
-
-2. Run the development server:
-```bash
 bun dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Building for Production
 
@@ -48,8 +37,4 @@ Total: 54 hotkeys to master
 
 ## Tech Stack
 
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-- shadcn/ui components
+Next.js 16 • React 19 • TypeScript • Tailwind v4 • shadcn/ui

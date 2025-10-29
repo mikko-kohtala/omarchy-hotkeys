@@ -68,26 +68,28 @@ export default function Home() {
   };
 
   // Filter hotkeys based on search query and selected keys
-  const filteredCategories = hotkeyCategories.map((category) => ({
-    ...category,
-    hotkeys: category.hotkeys.filter((hotkey) => {
-      // Search query filter
-      const query = searchQuery.toLowerCase();
-      const matchesSearch =
-        !query ||
-        hotkey.keys.toLowerCase().includes(query) ||
-        hotkey.description.toLowerCase().includes(query);
+  const filteredCategories = hotkeyCategories
+    .map((category) => ({
+      ...category,
+      hotkeys: category.hotkeys.filter((hotkey) => {
+        // Search query filter
+        const query = searchQuery.toLowerCase();
+        const matchesSearch =
+          !query ||
+          hotkey.keys.toLowerCase().includes(query) ||
+          hotkey.description.toLowerCase().includes(query);
 
-      // Selected keys filter (must contain ALL selected keys)
-      const matchesKeys =
-        selectedKeys.size === 0 ||
-        Array.from(selectedKeys).every((key) =>
-          hotkey.keys.toLowerCase().includes(key.toLowerCase())
-        );
+        // Selected keys filter (must contain ALL selected keys)
+        const matchesKeys =
+          selectedKeys.size === 0 ||
+          Array.from(selectedKeys).every((key) =>
+            hotkey.keys.toLowerCase().includes(key.toLowerCase())
+          );
 
-      return matchesSearch && matchesKeys;
-    }),
-  })).filter((category) => category.hotkeys.length > 0);
+        return matchesSearch && matchesKeys;
+      }),
+    }))
+    .filter((category) => category.hotkeys.length > 0);
 
   const totalHotkeys = hotkeyCategories.reduce(
     (sum, cat) => sum + cat.hotkeys.length,
@@ -205,9 +207,9 @@ export default function Home() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-neutral-400 text-sm">
+            <div className="text-neutral-400 text-sm">
               Filter by keys (select multiple to require all)
-            </label>
+            </div>
             <div className="flex flex-wrap gap-2">
               {FILTER_KEYS.map((key) => {
                 const isSelected = selectedKeys.has(key.name);
@@ -260,85 +262,86 @@ export default function Home() {
           {filteredCategories.length === 0 ? (
             <Card className="border-neutral-800 bg-neutral-900/50">
               <CardContent className="py-10 text-center">
-                <p className="text-neutral-400 text-lg">
+                <p className="text-lg text-neutral-400">
                   No hotkeys found matching &quot;{searchQuery}&quot;
                 </p>
               </CardContent>
             </Card>
           ) : (
             filteredCategories.map((category) => (
-            <Card
-              className="border-neutral-800 bg-neutral-900/50"
-              key={category.name}
-            >
-              <CardHeader>
-                <CardTitle className="text-2xl text-white">
-                  {category.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="border-neutral-800 border-b-2">
-                        <th className="px-3 py-4 text-left font-medium text-base text-neutral-400">
-                          Key Combination
-                        </th>
-                        <th className="px-5 py-4 text-left font-medium text-base text-neutral-400">
-                          Description
-                        </th>
-                        <th className="w-20 px-3 py-4 text-right font-medium text-base text-neutral-400">
-                          Done
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {category.hotkeys.map((hotkey) => (
-                        <tr
-                          className="cursor-pointer border-neutral-800/50 border-b transition-colors hover:bg-neutral-800/20"
-                          key={hotkey.id}
-                          onClick={() =>
-                            toggleHotkey(hotkey.id, !completed.has(hotkey.id))
-                          }
-                        >
-                          <td className="px-3 py-4 align-middle">
-                            <div
-                              className={`transition-opacity ${
-                                completed.has(hotkey.id) ? "opacity-50" : ""
-                              }`}
-                            >
-                              <KeyCombo keys={hotkey.keys} />
-                            </div>
-                          </td>
-                          <td className="px-5 py-4 align-middle">
-                            <div
-                              className={`text-base text-neutral-300 transition-opacity ${
-                                completed.has(hotkey.id)
-                                  ? "line-through opacity-50"
-                                  : ""
-                              }`}
-                            >
-                              {hotkey.description}
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 text-right align-middle">
-                            <Checkbox
-                              checked={completed.has(hotkey.id)}
-                              className="shrink-0 cursor-pointer"
-                              id={hotkey.id}
-                              onCheckedChange={(checked) =>
-                                toggleHotkey(hotkey.id, checked as boolean)
-                              }
-                            />
-                          </td>
+              <Card
+                className="border-neutral-800 bg-neutral-900/50"
+                key={category.name}
+              >
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white">
+                    {category.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="border-neutral-800 border-b-2">
+                          <th className="px-3 py-4 text-left font-medium text-base text-neutral-400">
+                            Key Combination
+                          </th>
+                          <th className="px-5 py-4 text-left font-medium text-base text-neutral-400">
+                            Description
+                          </th>
+                          <th className="w-20 px-3 py-4 text-right font-medium text-base text-neutral-400">
+                            Done
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )))}
+                      </thead>
+                      <tbody>
+                        {category.hotkeys.map((hotkey) => (
+                          <tr
+                            className="cursor-pointer border-neutral-800/50 border-b transition-colors hover:bg-neutral-800/20"
+                            key={hotkey.id}
+                            onClick={() =>
+                              toggleHotkey(hotkey.id, !completed.has(hotkey.id))
+                            }
+                          >
+                            <td className="px-3 py-4 align-middle">
+                              <div
+                                className={`transition-opacity ${
+                                  completed.has(hotkey.id) ? "opacity-50" : ""
+                                }`}
+                              >
+                                <KeyCombo keys={hotkey.keys} />
+                              </div>
+                            </td>
+                            <td className="px-5 py-4 align-middle">
+                              <div
+                                className={`text-base text-neutral-300 transition-opacity ${
+                                  completed.has(hotkey.id)
+                                    ? "line-through opacity-50"
+                                    : ""
+                                }`}
+                              >
+                                {hotkey.description}
+                              </div>
+                            </td>
+                            <td className="px-3 py-4 text-right align-middle">
+                              <Checkbox
+                                checked={completed.has(hotkey.id)}
+                                className="shrink-0 cursor-pointer"
+                                id={hotkey.id}
+                                onCheckedChange={(checked) =>
+                                  toggleHotkey(hotkey.id, checked as boolean)
+                                }
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </main>
       </div>
     </div>
