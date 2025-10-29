@@ -131,7 +131,7 @@ export const hotkeyCategories: HotkeyCategory[] = [
       },
       {
         id: "nav-13",
-        keys: k(KEY.SHIFT, KEY.SUPER, "1/2/3/4"),
+        keys: k(KEY.SUPER, KEY.SHIFT, "1/2/3/4"),
         description: "Move window to workspace",
       },
       {
@@ -278,7 +278,7 @@ export const hotkeyCategories: HotkeyCategory[] = [
       { id: "app-17", keys: k(KEY.SUPER, KEY.SHIFT, KEY.X), description: "X" },
       {
         id: "app-18",
-        keys: k(KEY.CTRL, KEY.SUPER, KEY.S),
+        keys: k(KEY.SUPER, KEY.CTRL, KEY.S),
         description: "Share menu (via LocalSend)",
       },
     ],
@@ -325,7 +325,7 @@ export const hotkeyCategories: HotkeyCategory[] = [
       },
       {
         id: "cap-5",
-        keys: k(KEY.ALT, KEY.SHIFT, KEY.L),
+        keys: k(KEY.SHIFT, KEY.ALT, KEY.L),
         description: "Copy current URL from webapp or Chromium",
       },
     ],
@@ -340,12 +340,12 @@ export const hotkeyCategories: HotkeyCategory[] = [
       },
       {
         id: "notif-2",
-        keys: k(KEY.SHIFT, KEY.SUPER, KEY.COMMA),
+        keys: k(KEY.SUPER, KEY.SHIFT, KEY.COMMA),
         description: "Dismiss all notifications",
       },
       {
         id: "notif-3",
-        keys: k(KEY.CTRL, KEY.SUPER, KEY.COMMA),
+        keys: k(KEY.SUPER, KEY.CTRL, KEY.COMMA),
         description: "Toggle silencing notifications",
       },
     ],
@@ -355,12 +355,12 @@ export const hotkeyCategories: HotkeyCategory[] = [
     hotkeys: [
       {
         id: "style-1",
-        keys: k(KEY.CTRL, KEY.SHIFT, KEY.SUPER, KEY.SPACE),
+        keys: k(KEY.SUPER, KEY.SHIFT, KEY.CTRL, KEY.SPACE),
         description: "Pick a new theme",
       },
       {
         id: "style-2",
-        keys: k(KEY.CTRL, KEY.SUPER, KEY.SPACE),
+        keys: k(KEY.SUPER, KEY.CTRL, KEY.SPACE),
         description: "Next background image for theme",
       },
       {
@@ -375,17 +375,17 @@ export const hotkeyCategories: HotkeyCategory[] = [
     hotkeys: [
       {
         id: "toggle-1",
-        keys: k(KEY.CTRL, KEY.SUPER, KEY.I),
+        keys: k(KEY.SUPER, KEY.CTRL, KEY.I),
         description: "Toggle idle/sleep prevention",
       },
       {
         id: "toggle-2",
-        keys: k(KEY.CTRL, KEY.SUPER, KEY.N),
+        keys: k(KEY.SUPER, KEY.CTRL, KEY.N),
         description: "Toggle nightlight display temperature",
       },
       {
         id: "toggle-3",
-        keys: k(KEY.SHIFT, KEY.SUPER, KEY.SPACE),
+        keys: k(KEY.SUPER, KEY.SHIFT, KEY.SPACE),
         description: "Toggle the top bar",
       },
       {
