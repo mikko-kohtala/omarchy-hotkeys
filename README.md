@@ -15,12 +15,12 @@ A modern Next.js web app to help you learn and practice all Omarchy hotkeys, bui
 
 1. Install dependencies:
 ```bash
-pnpm install
+bun install
 ```
 
 2. Run the development server:
 ```bash
-pnpm dev
+bun dev
 ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser
@@ -28,8 +28,8 @@ pnpm dev
 ## Building for Production
 
 ```bash
-pnpm build
-pnpm start
+bun build
+bun start
 ```
 
 ## Categories
